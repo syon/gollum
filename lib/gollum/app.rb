@@ -93,6 +93,11 @@ module Precious
       @js  = settings.wiki_options[:js]
     end
 
+    # Google Web Master Tool
+    get %r{/(google[a-z0-9]+.html)} do |filename|
+      File.read(File.join(:public_folder, filename))
+    end
+
     get '/' do
       page_dir = settings.wiki_options[:page_file_dir].to_s
       redirect clean_url(::File.join(@base_url, page_dir, wiki_new.index_page))
