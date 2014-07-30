@@ -280,6 +280,7 @@ module Precious
         @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
       end
       @path = clean_path(@path)
+      @path.sub!(/^\/source/, '/') ###EDIT
 
       page = wikip.page
       if page
@@ -297,11 +298,13 @@ module Precious
       wiki   = wiki_new
 
       path.gsub!(/^\//, '')
+      path = "source/#{path}" ###EDIT
 
       begin
         wiki.write_page(name, format, params[:content], commit_message, path)
 
         page_dir = settings.wiki_options[:page_file_dir].to_s
+        path.sub!(/^source\//, '') ###EDIT
         redirect to("/#{clean_url(::File.join(page_dir, path, name))}")
       rescue Gollum::DuplicatePageError => e
         @message = "Duplicate page: #{e.message}"
@@ -452,7 +455,7 @@ module Precious
       wiki = wiki_new
 
       name = extract_name(fullpath) || wiki.index_page
-      path = extract_path(fullpath) || '/'
+      path = extract_path(fullpath) || 'source' ###EDIT
 
       if page = wiki.paged(name, path, exact = true)
         @page          = page

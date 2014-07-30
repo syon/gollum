@@ -27,6 +27,7 @@ module Precious
 
     # Ensure path begins with a single leading slash
     def clean_path(path)
+      path.sub!(/^source/, '') ###EDIT
       if path
         (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
       end
@@ -35,6 +36,7 @@ module Precious
     # Remove all slashes from the start of string.
     # Remove all double slashes
     def clean_url url
+      url.sub!(/^source%2F/, '') ###EDIT
       return url if url.nil?
       url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
     end
