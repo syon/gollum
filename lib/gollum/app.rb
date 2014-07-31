@@ -115,6 +115,7 @@ module Precious
       name = extract_name(name) || wiki.index_page
       path = extract_path(path)
       path = '/' if exact && path.nil?
+      path = 'source' + path ###EDIT
 
       OpenStruct.new(:wiki => wiki, :page => wiki.paged(name, path, exact, version),
                      :name => name, :path => path)
@@ -280,7 +281,6 @@ module Precious
         @path = @path.sub(page_dir, '/') if @path.start_with? page_dir
       end
       @path = clean_path(@path)
-      @path.sub!(/^\/source/, '/') ###EDIT
 
       page = wikip.page
       if page
