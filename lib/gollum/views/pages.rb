@@ -15,6 +15,7 @@ module Precious
           breadcrumb = [%{<a href="#{@base_url}/pages/">Home</a>}]
           path.descend do |crumb|
             title = crumb.basename
+            next if title.to_s == 'source' ###EDIT
 
             if title == path.basename
               breadcrumb << title
