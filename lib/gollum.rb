@@ -37,5 +37,31 @@ module Gollum
       super(message || "Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.")
     end
   end
+
+  # Override gollum-lib/page.rb for Subdirectory-Mode
+  class Page
+    def url_path
+      path = if self.path.include?('/')
+               self.path.sub(/\/[^\/]+$/, '/')
+             else
+               ''
+             end
+
+      path << Page.cname(self.name, '-', '-')
+      path.sub!(/^source\//, '')
+      path
+    end
+  end
+
+  # Override gollum-lib/file.rb for Subdirectory-Mode
+  class File
+    def url_path
+      path = self.path
+      path = path.sub(/\/[^\/]+$/, '/') if path.include?('/')
+      path.sub!(/^source\//, '')
+      path
+    end
+  end
+
 end
 
