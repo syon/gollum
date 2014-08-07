@@ -93,6 +93,23 @@ module Precious
       @js  = settings.wiki_options[:js]
     end
 
+    # Sitemap
+    get '/sitemap.txt' do
+      siteroot_url = request.url.match(/(https?:\/\/.*?\/)/)[1]
+      wiki_options = settings.wiki_options.merge({ :page_file_dir => 'source' })
+      wiki         = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+      @results     = wiki.pages
+      @results     += wiki.files if settings.wiki_options[:show_all]
+      pagelist = []
+      @results.map { |page|
+        page_url = page.path.sub(/source\/(.*?)\.md/, "#{$1}")
+        page_url = "" if page_url == siteroot_url
+        pagelist << "#{siteroot_url}#{page_url}"
+      }
+      content_type :txt
+      pagelist.join("\n")
+    end
+
     # Google Web Master Tool
     get %r{/(google[a-z0-9]+.html)} do |filename|
       File.read(File.join(:public_folder, filename))
